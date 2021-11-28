@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Spendee.Data\Spendee.Database.csproj" />
+    <ProjectReference Include="..\Spendee.Shared\Spendee.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,26 @@
+using Spendee.API.Managers;
+using Spendee.Database;
+using Spendee.Database.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(builder =>
+        builder.SetIsOriginAllowed(o => true)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
+string connectionString = builder.Configuration.GetConnectionString("MySQL");
+builder.Services.AddScoped<IWalletRepository>(_ => new WalletRepository(connectionString));
+builder.Services.AddScoped<ICategoryRepository>(_ => new CategoryRepository(connectionString));
+builder.Services.AddScoped<CategoriesManager>();
 
 var app = builder.Build();
 
@@ -15,29 +32,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
-var summaries = new[]
+app.MapGet("/categories", async (CategoriesManager categoriesManager) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    var result = await categoriesManager.GetAllCategoriesAsync();
+    if (result == null)
+        return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
+    return Results.Ok(result);
+});
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
