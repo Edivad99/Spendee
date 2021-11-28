@@ -1,6 +1,6 @@
 ﻿using Spendee.Database.Entity;
 
-namespace Spendee.Database;
+namespace Spendee.Database.Repository;
 
 public class CategoryRepository : Repository
 {

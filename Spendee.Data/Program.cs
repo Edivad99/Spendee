@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Spendee.Database;
+using Spendee.Database.Repository;
 
 Console.WriteLine("Hello, World!");
 

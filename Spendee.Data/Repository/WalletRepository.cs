@@ -2,7 +2,7 @@
 using Spendee.Database.Entity;
 using System.Data;
 
-namespace Spendee.Database;
+namespace Spendee.Database.Repository;
 
 public class WalletRepository : Repository
 {

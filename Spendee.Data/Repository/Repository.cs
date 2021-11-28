@@ -2,7 +2,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace Spendee.Database;
+namespace Spendee.Database.Repository;
 
 public abstract class Repository
 {
