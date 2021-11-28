@@ -1,4 +1,5 @@
-﻿using Spendee.API.Utils;
+﻿using Spendee.API.Extensions;
+using Spendee.API.Utils;
 using Spendee.Database;
 using Spendee.Shared.Models;
 
@@ -21,7 +22,7 @@ public class CategoriesManager
         try
         {
             var categories = await _categoryRepository.GetAllCategoriesAsync();
-            var response = categories.Select(category => new CategoryDTO { Name = category.Name });
+            var response = categories.Select(category => category.ToDTO());
             _logger.LogInformation($"Request completed with {response.Count()} categories");
             return new()
             {

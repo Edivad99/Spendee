@@ -1,4 +1,5 @@
-﻿using Spendee.API.Utils;
+﻿using Spendee.API.Extensions;
+using Spendee.API.Utils;
 using Spendee.Database;
 using Spendee.Shared.Models;
 
@@ -21,7 +22,7 @@ public class WalletsManager
         try
         {
             var wallets = await _walletRepository.GetAllWalletsAsync();
-            var response = wallets.Select(wallet => new WalletDTO { Name = wallet.Name });
+            var response = wallets.Select(wallet => wallet.ToDTO());
             _logger.LogInformation($"GetAllWallets's request completed with {response.Count()} wallets");
             return new()
             {
@@ -46,15 +47,7 @@ public class WalletsManager
         try
         {
             var transactions = await _walletRepository.GetTransactionsByWalletIdAsync(walletID);
-            var response = transactions
-                .Select(transaction => new TransactionDTO 
-                { 
-                    Id = transaction.Id,
-                    Price = transaction.Price,
-                    Description = transaction.Description,
-                    Date = transaction.Date,
-                    Category = new CategoryDTO { Name = transaction.Category.Name }
-                });
+            var response = transactions.Select(transaction => transaction.ToDTO());
             _logger.LogInformation($"GetTransactionsByWalletIdAsync's request completed with {response.Count()} transactions");
             
             return new()
