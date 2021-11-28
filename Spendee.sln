@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spendee.API", "Spendee.API\Spendee.API.csproj", "{98B85E32-6A39-47CA-8298-CA3EF088C4A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spendee.Database", "Spendee.Data\Spendee.Database.csproj", "{3C062FA2-6ADB-4778-9B96-055408DDECD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98B85E32-6A39-47CA-8298-CA3EF088C4A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98B85E32-6A39-47CA-8298-CA3EF088C4A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98B85E32-6A39-47CA-8298-CA3EF088C4A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98B85E32-6A39-47CA-8298-CA3EF088C4A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C062FA2-6ADB-4778-9B96-055408DDECD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C062FA2-6ADB-4778-9B96-055408DDECD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C062FA2-6ADB-4778-9B96-055408DDECD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C062FA2-6ADB-4778-9B96-055408DDECD8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E97C9744-584B-41E5-8823-A3253D035810}
+	EndGlobalSection
+EndGlobal
