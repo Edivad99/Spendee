@@ -1,0 +1,53 @@
+﻿@page "/wallet/{Id:int}"
+@inject IHttpClientFactory ClientFactory
+
+<PageTitle>Portafoglio: @wallet?.Name</PageTitle>
+
+<h1>Portafoglio: @wallet?.Name</h1>
+
+@if (transactions == null || wallet == null)
+{
+    <p><em>Caricamento...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Descrizione</th>
+                <th>Prezzo</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in transactions)
+            {
+                <tr>
+                    <td>@item.Description</td>
+                    <td>@item.Price</td>
+                    <td>@item.Date.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private WalletDTO wallet;
+    private TransactionDTO[] transactions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Recuperare informazioni portafoglio
+        var walletResponse = await ClientFactory.CreateClient("api").GetAsync($"/wallets");
+        var wallets = await walletResponse.Content.ReadFromJsonAsync<WalletDTO[]>();
+        wallet = wallets.FirstOrDefault(w => w.Id == Id);
+
+        //Recuperare informazioni sulle transazioni
+        var transactionsResponse = await ClientFactory.CreateClient("api").GetAsync($"/wallets/{Id}");
+        transactions = await transactionsResponse.Content.ReadFromJsonAsync<TransactionDTO[]>();
+    }
+}

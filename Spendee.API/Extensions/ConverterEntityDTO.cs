@@ -17,6 +17,7 @@ public static class ConverterEntityDTO
     {
         return new()
         {
+            Id = wallet.Id,
             Name = wallet.Name
         };
     }
