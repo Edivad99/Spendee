@@ -34,9 +34,9 @@ app.UseCors();
 app.MapGet("/categories", async (CategoriesManager categoriesManager) =>
 {
     var result = await categoriesManager.GetAllCategoriesAsync();
-    if (result == null)
-        return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
-    return Results.Ok(result);
+    if (result.StatusCode == StatusCodes.Status200OK)
+        return Results.Ok(result.Result);
+    return Results.StatusCode(result.StatusCode);
 });
 
 
@@ -44,17 +44,17 @@ app.MapGet("/categories", async (CategoriesManager categoriesManager) =>
 app.MapGet("/wallets", async (WalletsManager walletsManager) =>
 {
     var result = await walletsManager.GetAllWalletsAsync();
-    if (result == null)
-        return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
-    return Results.Ok(result);
+    if (result.StatusCode == StatusCodes.Status200OK)
+        return Results.Ok(result.Result);
+    return Results.StatusCode(result.StatusCode);
 });
 
 app.MapGet("/wallets/{id}", async (int id, WalletsManager walletsManager) =>
 {
     var result = await walletsManager.GetTransactionsByWalletIdAsync(id);
-    if (result == null)
-        return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
-    return Results.Ok(result);
+    if (result.StatusCode == StatusCodes.Status200OK)
+        return Results.Ok(result.Result);
+    return Results.StatusCode(result.StatusCode);
 });
 
 app.Run();
