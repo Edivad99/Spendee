@@ -1,0 +1,47 @@
+﻿@page "/fetchdata"
+@inject IHttpClientFactory ClientFactory
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (transactions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Descrizione</th>
+                <th>Prezzo</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in transactions)
+            {
+                <tr>
+                    <td>@item.Description</td>
+                    <td>@item.Price</td>
+                    <td>@item.Date.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private TransactionDTO[] transactions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = "1";
+        var url = $"/wallets/{id}";
+        var response = await ClientFactory.CreateClient("api").GetAsync(url);
+        transactions = await response.Content.ReadFromJsonAsync<TransactionDTO[]>();
+    }
+}
