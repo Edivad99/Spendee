@@ -1,10 +1,10 @@
-﻿namespace Spendee.Database.Entity;
+﻿namespace Spendee.Shared.Models;
 
-public record Transaction
+public record TransactionDTO
 {
     public int Id { get; set; }
     public string Description { get; set; }
     public float Price { get; set; }
     public DateTime Date { get; set; }
-    public Category Category { get; set; }
+    public CategoryDTO Category { get; set; }
 }

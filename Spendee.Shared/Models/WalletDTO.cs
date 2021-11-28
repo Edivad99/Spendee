@@ -1,6 +1,6 @@
 ﻿namespace Spendee.Shared.Models;
 
-public record Category
+public record WalletDTO
 {
     public string Name { get; set; }
 }

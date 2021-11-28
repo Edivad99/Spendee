@@ -1,6 +1,5 @@
+using Spendee.API.Extensions;
 using Spendee.API.Managers;
-using Spendee.Database;
-using Spendee.Database.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +16,7 @@ builder.Services.AddCors(opt =>
             .AllowCredentials());
 });
 
-string connectionString = builder.Configuration.GetConnectionString("MySQL");
-builder.Services.AddScoped<IWalletRepository>(_ => new WalletRepository(connectionString));
-builder.Services.AddScoped<ICategoryRepository>(_ => new CategoryRepository(connectionString));
-builder.Services.AddScoped<CategoriesManager>();
+builder.ConfigureCustomServices();
 
 var app = builder.Build();
 
@@ -34,9 +30,28 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors();
 
+// Categories
 app.MapGet("/categories", async (CategoriesManager categoriesManager) =>
 {
     var result = await categoriesManager.GetAllCategoriesAsync();
+    if (result == null)
+        return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
+    return Results.Ok(result);
+});
+
+
+// Wallets
+app.MapGet("/wallets", async (WalletsManager walletsManager) =>
+{
+    var result = await walletsManager.GetAllWalletsAsync();
+    if (result == null)
+        return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
+    return Results.Ok(result);
+});
+
+app.MapGet("/wallets/{id}", async (int id, WalletsManager walletsManager) =>
+{
+    var result = await walletsManager.GetTransactionsByWalletIdAsync(id);
     if (result == null)
         return Results.StatusCode((int)StatusCodes.Status500InternalServerError);
     return Results.Ok(result);
