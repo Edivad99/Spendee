@@ -1,19 +1,16 @@
 ﻿using Dapper;
-using MySql.Data.MySqlClient;
 using Spendee.Database.Entity;
 using System.Data;
 
 namespace Spendee.Database;
 
-public class WalletRepository
+public class WalletRepository : Repository
 {
-    private readonly string ConnectionString;
+    public WalletRepository(string connectionString) : base(connectionString) { }
 
-    public WalletRepository(string connectionString) => ConnectionString = connectionString;
+    public async Task<IEnumerable<Wallet>> GetAllWalletsAsync() => await GetAllEntries<Wallet>("SELECT * FROM Wallets;");
 
-    private IDbConnection GetDbConnection() => new MySqlConnection(ConnectionString);
-
-    public async Task<IEnumerable<Transaction>> GetTransactionsAsync(int walletID)
+    public async Task<IEnumerable<Transaction>> GetTransactionsByWalletIdAsync(int walletID)
     {
         var sql = @"SELECT * 
                     FROM Transactions t, Categories c 
