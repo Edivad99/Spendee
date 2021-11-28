@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Spendee.Database.Repository;
 
-public class WalletRepository : Repository
+public class WalletRepository : Repository, IWalletRepository
 {
     public WalletRepository(string connectionString) : base(connectionString) { }
 

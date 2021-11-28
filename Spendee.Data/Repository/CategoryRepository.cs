@@ -2,7 +2,7 @@
 
 namespace Spendee.Database.Repository;
 
-public class CategoryRepository : Repository
+public class CategoryRepository : Repository, ICategoryRepository
 {
     public CategoryRepository(string connectionString) : base(connectionString) { }
 
