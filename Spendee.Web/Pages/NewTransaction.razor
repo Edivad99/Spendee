@@ -1,0 +1,72 @@
+﻿@page "/wallet/{Id:int}/new"
+@inject IHttpClientFactory ClientFactory
+
+<PageTitle>Aggiunta movimento</PageTitle>
+<h3>Aggiungi movimento</h3>
+
+@if (categories == null)
+{
+    <p><em>Caricamento...</em></p>
+}
+else
+{
+    <EditForm Model="@newTransaction" OnValidSubmit="SaveTransactions">
+        <DataAnnotationsValidator/>
+        <div class="row mb-3">
+            <label for="description" class="col-sm-2 col-form-label">Descrizione:</label>
+            <div class="col-sm-10">
+                <InputText @bind-Value="newTransaction.Description" class="form-control" id="description" />
+                <ValidationMessage For="(()=> newTransaction.Description)" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="price" class="col-sm-2 col-form-label">Prezzo</label>
+            <div class="col-sm-10">
+                <InputNumber class="form-control" id="price" @bind-Value="newTransaction.Price" />
+                <ValidationMessage For="(()=> newTransaction.Price)" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="category" class="col-form-label col-sm-2 pt-0">Categoria:</label>
+            <div class="col-sm-10">
+                <InputSelect @bind-Value="newTransaction.Category.Id" class="form-select" id="category">
+                    <option selected disabled value="0">Seleziona una categoria</option>
+                    @foreach (var item in categories)
+                    {
+                    <option value="@item.Id">@item.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="(()=> newTransaction.Category.Id)" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Aggiungi</button>
+    </EditForm>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private TransactionDTO newTransaction = new() { Category = new() };
+    private CategoryDTO[] categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Recuperare le categorie
+        var categoriesResponse = await ClientFactory.CreateClient("api").GetAsync("/categories");
+        categories = await categoriesResponse.Content.ReadFromJsonAsync<CategoryDTO[]>();
+    }
+
+    async Task SaveTransactions()
+    {
+        if (newTransaction.Category.Id <= 0) return;
+        newTransaction.Date = DateTime.Now;
+
+        var response = await ClientFactory.CreateClient("api").PostAsJsonAsync($"/wallets/{Id}", newTransaction);
+        if(response.StatusCode == HttpStatusCode.Created)
+        {
+            newTransaction = new() { Category = new() };
+        }
+    }
+}

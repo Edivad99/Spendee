@@ -9,6 +9,7 @@ public static class ConverterEntityDTO
     {
         return new()
         {
+            Id = category.Id,
             Name = category.Name
         };
     }

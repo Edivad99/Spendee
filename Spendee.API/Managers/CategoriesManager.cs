@@ -16,7 +16,7 @@ public class CategoriesManager
         _logger = logger;
     }
 
-    public async Task<ResponseResult<IEnumerable<CategoryDTO>>> GetAllCategoriesAsync()
+    public async Task<Response<IEnumerable<CategoryDTO>>> GetAllCategoriesAsync()
     {
         _logger.LogInformation("New requests GetAllCategories");
         try

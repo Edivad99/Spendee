@@ -1,6 +1,7 @@
 ﻿using Spendee.API.Extensions;
 using Spendee.API.Utils;
 using Spendee.Database;
+using Spendee.Database.Entity;
 using Spendee.Shared.Models;
 
 namespace Spendee.API.Managers;
@@ -16,7 +17,7 @@ public class WalletsManager
         _walletRepository = walletRepository;
     }
 
-    public async Task<ResponseResult<IEnumerable<WalletDTO>>> GetAllWalletsAsync()
+    public async Task<Response<IEnumerable<WalletDTO>>> GetAllWalletsAsync()
     {
         _logger.LogInformation("New requests GetAllWallets");
         try
@@ -41,7 +42,7 @@ public class WalletsManager
         }
     }
 
-    public async Task<ResponseResult<IEnumerable<TransactionDTO>>> GetTransactionsByWalletIdAsync(int walletID)
+    public async Task<Response<IEnumerable<TransactionDTO>>> GetTransactionsByWalletIdAsync(int walletID)
     {
         _logger.LogInformation($"New requests GetTransactionsByWalletIdAsync with id: {walletID}");
         try
@@ -64,6 +65,38 @@ public class WalletsManager
                 Result = null,
                 StatusCode = StatusCodes.Status500InternalServerError
             };
+        }
+    }
+
+    public async Task<int> AddTransactionAsync(int walletID, TransactionDTO transaction)
+    {
+        _logger.LogInformation($"New requests AddTransactionAsync in walletId: {walletID} and transaction: {transaction}");
+        try
+        {
+            var entityTransaction = new Transaction
+            {
+                Id = transaction.Id,
+                Description = transaction.Description,
+                Date = transaction.Date,
+                Price = transaction.Price,
+                Category = new Category
+                {
+                    Id = transaction.Category.Id,
+                    Name = transaction.Category.Name
+                }
+            };
+
+
+            await _walletRepository.AddTransaction(walletID, entityTransaction);
+            
+            _logger.LogInformation($"Added new transaction");
+
+            return StatusCodes.Status201Created;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Exception in AddTransactionAsync in walletId: {walletID} and transaction: {transaction}");
+            return StatusCodes.Status500InternalServerError;
         }
     }
 }

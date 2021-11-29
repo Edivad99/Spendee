@@ -6,4 +6,5 @@ public interface IWalletRepository
 {
     Task<IEnumerable<Wallet>> GetAllWalletsAsync();
     Task<IEnumerable<Transaction>> GetTransactionsByWalletIdAsync(int walletID);
+    Task AddTransaction(int walletID, Transaction transaction);
 }
