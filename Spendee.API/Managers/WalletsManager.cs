@@ -48,7 +48,9 @@ public class WalletsManager
         try
         {
             var transactions = await _walletRepository.GetTransactionsByWalletIdAsync(walletID);
-            var response = transactions.Select(transaction => transaction.ToDTO());
+            var response = transactions
+                .Select(transaction => transaction.ToDTO())
+                .OrderByDescending(t => t.Date);
             _logger.LogInformation($"GetTransactionsByWalletIdAsync's request completed with {response.Count()} transactions");
             
             return new()

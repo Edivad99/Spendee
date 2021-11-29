@@ -24,13 +24,15 @@ else
             {
                 <tr>
                     <td>@item.Description</td>
-                    <td>@item.Price</td>
+                    <td style="color: @(item.Price > 0 ? "green" : "red")">@item.Price</td>
                     <td>@item.Date.ToShortDateString()</td>
                 </tr>
             }
         </tbody>
     </table>
 }
+<a href="wallet/@(Id)/new" class="btn btn-success">Aggiungi transazione</a>
+
 
 @code {
     [Parameter]
