@@ -4,6 +4,7 @@
 <PageTitle>Portafoglio: @wallet?.Name</PageTitle>
 
 <h1>Portafoglio: @wallet?.Name</h1>
+<h3>Disponibilità: @transactions?.Sum(t => t.Price).ToString("0.00")</h3>
 
 @if (transactions == null || wallet == null)
 {
@@ -16,6 +17,7 @@ else
             <tr>
                 <th>Descrizione</th>
                 <th>Prezzo</th>
+                <th>Categoria</th>
                 <th>Data</th>
             </tr>
         </thead>
@@ -25,7 +27,8 @@ else
                 <tr>
                     <td>@item.Description</td>
                     <td style="color: @(item.Price > 0 ? "green" : "red")">@item.Price</td>
-                    <td>@item.Date.ToShortDateString()</td>
+                    <td>@item.Category.Name</td>
+                    <td>@item.Date.ToString()</td>
                 </tr>
             }
         </tbody>
