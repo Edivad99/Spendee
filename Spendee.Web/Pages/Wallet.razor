@@ -4,7 +4,7 @@
 <PageTitle>Portafoglio: @wallet?.Name</PageTitle>
 
 <h1>Portafoglio: @wallet?.Name</h1>
-<h3>Disponibilità: @transactions?.Sum(t => t.Price).ToString("0.00")</h3>
+<h3>Disponibilità: @(transactions?.Sum(t => t.Price).ToString("0.00")+(wallet?.Currency))</h3>
 
 @if (transactions == null || wallet == null)
 {

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Dapper.Transaction;
 using Spendee.Database.Entity;
 using System.Data;
 
@@ -40,7 +41,32 @@ public class WalletRepository : Repository, IWalletRepository
         dynamicParameters.Add("@PRICE", transaction.Price, DbType.Decimal, ParameterDirection.Input);
         dynamicParameters.Add("@DATE", transaction.Date, DbType.DateTime, ParameterDirection.Input);
 
+        var sql2 = @"UPDATE `Wallets` SET `LastModified` = @DATE WHERE `Id` = @WALLETID;";
+        var dynamicParameters2 = new DynamicParameters();
+        dynamicParameters2.Add("@DATE", transaction.Date, DbType.DateTime, ParameterDirection.Input);
+        dynamicParameters2.Add("@WALLETID", walletID, DbType.Int32, ParameterDirection.Input);
+        
+
         using var conn = GetDbConnection();
-        await conn.ExecuteAsync(sql, dynamicParameters);
+        conn.Open();
+        using var sqlTransaction = conn.BeginTransaction();
+        try
+        {
+            await sqlTransaction.ExecuteAsync(sql, dynamicParameters);
+            await sqlTransaction.ExecuteAsync(sql2, dynamicParameters2);
+            sqlTransaction.Commit();
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                sqlTransaction.Rollback();
+            }
+            catch (Exception ex2)
+            {
+                throw new Exception(ex2.Message, ex2.InnerException);
+            }
+            throw new Exception(ex.Message, ex.InnerException);
+        }
     }
 }

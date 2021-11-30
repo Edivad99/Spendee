@@ -19,7 +19,9 @@ public static class ConverterEntityDTO
         return new()
         {
             Id = wallet.Id,
-            Name = wallet.Name
+            Name = wallet.Name,
+            LastModified = wallet.LastModified,
+            Currency = wallet.Currency
         };
     }
 

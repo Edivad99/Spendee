@@ -10,6 +10,8 @@ CREATE TABLE Wallets
 (
 	`ID` INT NOT NULL AUTO_INCREMENT,
 	`Name` VARCHAR(100) NOT NULL,
+	`LastModified` DATETIME NOT NULL,
+	`Currency` CHAR(1) NOT NULL,
 	PRIMARY KEY(`ID`)
 ) ENGINE = InnoDB;
 
@@ -33,8 +35,8 @@ CREATE TABLE Transactions
 	FOREIGN KEY (`WalletID`) REFERENCES `Wallets` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
-INSERT INTO `Wallets` (`ID`, `Name`) VALUES
-(1, 'Test');
+INSERT INTO `Wallets` (`ID`, `Name`, `LastModified`, `Currency`) VALUES
+(1, 'Test', '2021-11-30T10:00:25', '€');
 
 INSERT INTO `Categories` (`ID`, `Name`) VALUES
 (1, 'Abbigliamento'),

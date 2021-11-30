@@ -39,7 +39,10 @@ else
                 <ValidationMessage For="(()=> newTransaction.Category.Id)" />
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Aggiungi</button>
+        <div class="btn-group">
+            <a href="wallet/@(Id)" class="btn btn-outline-primary">Torna indietro</a>
+            <button type="submit" class="btn btn-primary">Aggiungi</button>
+        </div>
     </EditForm>
 }
 
