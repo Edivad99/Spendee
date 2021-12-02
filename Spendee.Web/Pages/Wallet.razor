@@ -6,6 +6,8 @@
 <h1>Portafoglio: @wallet?.Name</h1>
 <h3>Disponibilità: @(transactions?.Sum(t => t.Price).ToString("0.00")+(wallet?.Currency))</h3>
 
+<a href="wallet/@(Id)/new" class="btn btn-success">Aggiungi transazione</a>
+
 @if (transactions == null || wallet == null)
 {
     <p><em>Caricamento...</em></p>
@@ -28,13 +30,12 @@ else
                     <td>@item.Description</td>
                     <td style="color: @(item.Price > 0 ? "green" : "red")">@item.Price</td>
                     <td>@item.Category.Name</td>
-                    <td>@item.Date.ToString()</td>
+                    <td>@item.Date.ToShortDateString()</td>
                 </tr>
             }
         </tbody>
     </table>
 }
-<a href="wallet/@(Id)/new" class="btn btn-success">Aggiungi transazione</a>
 
 
 @code {

@@ -10,6 +10,8 @@ public record TransactionDTO
     public string Description { get; set; }
     [NotZero]
     public float Price { get; set; }
+    [Required]
     public DateTime Date { get; set; }
+    [Required]
     public CategoryDTO Category { get; set; }
 }
