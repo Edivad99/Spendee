@@ -1,19 +1,18 @@
 ﻿@page "/wallet/{Id:int}"
 @inject IHttpClientFactory ClientFactory
 
-<PageTitle>Portafoglio: @wallet?.Name</PageTitle>
-
-<h1>Portafoglio: @wallet?.Name</h1>
-<h3>Disponibilità: @(transactions?.Sum(t => t.Price).ToString("0.00")+(wallet?.Currency))</h3>
-
-<a href="wallet/@(Id)/new" class="btn btn-success">Aggiungi transazione</a>
-
 @if (transactions == null || wallet == null)
 {
     <p><em>Caricamento...</em></p>
 }
 else
 {
+    <PageTitle>Portafoglio: @wallet.Name</PageTitle>
+
+    <h1>Portafoglio: @wallet.Name</h1>
+    <h3>Disponibilità: @getDisponibility()</h3>
+
+    <a href="wallet/@(Id)/new" class="btn btn-success">Aggiungi transazione</a>
     <table class="table">
         <thead>
             <tr>
@@ -54,6 +53,11 @@ else
 
         //Recuperare informazioni sulle transazioni
         var transactionsResponse = await ClientFactory.CreateClient("api").GetAsync($"/wallets/{Id}");
-        transactions = await transactionsResponse.Content.ReadFromJsonAsync<TransactionDTO[]>();
+        if (transactionsResponse.IsSuccessStatusCode)
+            transactions = await transactionsResponse.Content.ReadFromJsonAsync<TransactionDTO[]>();
+        else
+            transactions = Array.Empty<TransactionDTO>();
     }
+
+    string getDisponibility() => transactions.Sum(t => t.Price).ToString("0.00") + wallet.Currency;
 }

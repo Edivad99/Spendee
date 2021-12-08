@@ -1,0 +1,44 @@
+﻿@page "/wallet/new"
+@inject IHttpClientFactory ClientFactory
+
+<PageTitle>Nuovo portafoglio</PageTitle>
+<h3>Nuovo portafoglio</h3>
+
+<EditForm Model="@newWallet" OnValidSubmit="CreateWallet" autocomplete="off">
+    <DataAnnotationsValidator/>
+    <div class="row mb-3">
+        <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+        <div class="col-sm-10">
+            <InputText @bind-Value="newWallet.Name" class="form-control" id="name" />
+            <ValidationMessage For="(()=> newWallet.Name)" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="currency" class="col-form-label col-sm-2 pt-0">Moneta:</label>
+        <div class="col-sm-10">
+            <InputSelect @bind-Value="newWallet.Currency" class="form-select" id="currency">
+                <option selected disabled value="0">Seleziona una moneta</option>
+                <option value="EUR">Euro (€)</option>
+                <option value="USD">Dollaro ($)</option>
+            </InputSelect>
+            <ValidationMessage For="(()=> newWallet.Currency)" />
+        </div>
+    </div>
+    <div class="btn-group">
+        <a href="wallet" class="btn btn-outline-primary">Torna indietro</a>
+        <button type="submit" class="btn btn-primary">Aggiungi</button>
+    </div>
+</EditForm>
+
+
+
+@code {
+    private WalletDTO newWallet = new();
+
+    async Task CreateWallet()
+    {
+        if(string.IsNullOrEmpty(newWallet.Currency)) return;
+        var response = await ClientFactory.CreateClient("api").PostAsJsonAsync("/wallets", newWallet);
+        if (response.IsSuccessStatusCode) newWallet = new();
+    }
+}

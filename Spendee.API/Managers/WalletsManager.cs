@@ -23,7 +23,9 @@ public class WalletsManager
         try
         {
             var wallets = await _walletRepository.GetAllWalletsAsync();
-            var response = wallets.Select(wallet => wallet.ToDTO());
+            var response = wallets
+                .Select(wallet => wallet.ToDTO())
+                .OrderByDescending(wallet => wallet.LastModified); ;
             _logger.LogInformation($"GetAllWallets's request completed with {response.Count()} wallets");
             return new()
             {
@@ -39,6 +41,30 @@ public class WalletsManager
                 Result = null,
                 StatusCode = StatusCodes.Status500InternalServerError
             };
+        }
+    }
+
+    public async Task<int> AddWallet(WalletDTO wallet)
+    {
+        _logger.LogInformation($"New requests AddNewWallet with wallet: {wallet}");
+        try
+        {
+            var newWallet = new Wallet
+            {
+                Name = wallet.Name,
+                Currency = wallet.Currency,
+                LastModified = DateTime.Now
+            };
+            await _walletRepository.AddWallet(newWallet);
+
+            _logger.LogInformation($"Added new wallet");
+
+            return StatusCodes.Status201Created;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Exception in AddNewWallet with wallet: {wallet}");
+            return StatusCodes.Status500InternalServerError;
         }
     }
 

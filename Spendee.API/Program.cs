@@ -50,6 +50,14 @@ app.MapGet("/wallets", async (WalletsManager walletsManager) =>
     return Results.StatusCode(result.StatusCode);
 });
 
+app.MapPost("/wallets", async (WalletDTO wallet, WalletsManager walletsManager) =>
+{
+    var result = await walletsManager.AddWallet(wallet);
+    if (result == StatusCodes.Status201Created)
+        return Results.Created($"/wallets", result);
+    return Results.StatusCode(result);
+});
+
 app.MapGet("/wallets/{id}", async (int id, WalletsManager walletsManager) =>
 {
     var result = await walletsManager.GetTransactionsByWalletIdAsync(id);

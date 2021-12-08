@@ -11,6 +11,21 @@ public class WalletRepository : Repository, IWalletRepository
 
     public async Task<IEnumerable<Wallet>> GetAllWalletsAsync() => await GetAllEntries<Wallet>("SELECT * FROM Wallets;");
 
+    public async Task AddWallet(Wallet wallet)
+    {
+        var sql = @"INSERT INTO `Wallets` (`Name`, `LastModified`, `Currency`) VALUES
+                    (@NAME, @DATE, @CURRENCY);";
+
+        var dynamicParameters = new DynamicParameters();
+        dynamicParameters.Add("@NAME", wallet.Name, DbType.String, ParameterDirection.Input);
+        dynamicParameters.Add("@DATE", wallet.LastModified, DbType.DateTime, ParameterDirection.Input);
+        dynamicParameters.Add("@CURRENCY", wallet.Currency, DbType.String, ParameterDirection.Input);
+
+        using var conn = GetDbConnection();
+        await conn.ExecuteAsync(sql, dynamicParameters);
+    }
+
+
     public async Task<IEnumerable<Transaction>> GetTransactionsByWalletIdAsync(int walletID)
     {
         var sql = @"SELECT * 
@@ -43,7 +58,7 @@ public class WalletRepository : Repository, IWalletRepository
 
         var sql2 = @"UPDATE `Wallets` SET `LastModified` = @DATE WHERE `Id` = @WALLETID;";
         var dynamicParameters2 = new DynamicParameters();
-        dynamicParameters2.Add("@DATE", transaction.Date, DbType.DateTime, ParameterDirection.Input);
+        dynamicParameters2.Add("@DATE", DateTime.Today, DbType.DateTime, ParameterDirection.Input);
         dynamicParameters2.Add("@WALLETID", walletID, DbType.Int32, ParameterDirection.Input);
         
 

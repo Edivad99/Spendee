@@ -11,7 +11,7 @@ CREATE TABLE Wallets
 	`ID` INT NOT NULL AUTO_INCREMENT,
 	`Name` VARCHAR(100) NOT NULL,
 	`LastModified` DATETIME NOT NULL,
-	`Currency` CHAR(1) NOT NULL,
+	`Currency` VARCHAR(3) NOT NULL,
 	PRIMARY KEY(`ID`)
 ) ENGINE = InnoDB;
 
@@ -27,7 +27,7 @@ CREATE TABLE Transactions
     `ID` INT NOT NULL AUTO_INCREMENT,
     `Description` VARCHAR(100) NOT NULL,
     `Price` FLOAT NOT NULL,
-	`Date` DATETIME NOT NULL,
+	`Date` DATE NOT NULL,
     `CategoryID` INT NOT NULL,
 	`WalletID` INT NOT NULL,
     PRIMARY KEY (`ID`),
